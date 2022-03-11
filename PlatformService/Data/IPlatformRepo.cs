@@ -11,5 +11,12 @@ namespace PlatformService.Data
 
         // Get all Platforms as an IEnumerable
         IEnumerable<Platform> GetAllPlatforms();
+        
+        // Get individual Platform
+        Platform GetPlatformById(int id);
+
+        // Create Platform
+        void CreatePlatform(Platform platform);
+
     }
 }

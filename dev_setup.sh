@@ -48,3 +48,4 @@ touch Data/AppDbContext.cs
 # We're going to inject our repository through dependency injection via Startup Class for this one
 cd /workspaces/dotnet-on-k8s/PlatformService/Data/
 touch IPlatformRepo.cs # The "I" is for the interface
+touch PlatformRepo.cs # The class implementing the interface
