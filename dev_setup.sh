@@ -37,3 +37,14 @@ touch Models/Platform.cs # Internal model of the data
 cd /workspaces/dotnet-on-k8s/PlatformService/
 mkdir Data
 touch Data/AppDbContext.cs
+
+# - - - - - - - - - - - - - - 
+# Repository
+# - - - - - - - - - - - - - - 
+# We will use the "Interface Concrete Class" pattern:
+#  - Interface: What signatures to implement
+#  - Concrete Class: Implementation of the interface
+# https://stackoverflow.com/questions/19789590/interface-abstract-class-concrete-class-pattern
+# We're going to inject our repository through dependency injection via Startup Class for this one
+cd /workspaces/dotnet-on-k8s/PlatformService/Data/
+touch IPlatformRepo.cs # The "I" is for the interface
