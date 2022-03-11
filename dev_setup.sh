@@ -25,8 +25,15 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer -v 5.0.8
 # - - - - - - - - - - - - - - 
 # Data Layer - Model
 # - - - - - - - - - - - - - - 
-cd ..
+cd /workspaces/dotnet-on-k8s/PlatformService/
 mkdir Models
 touch Models/Platform.cs # Internal model of the data
 # Models = Internal
 # DTO = External
+
+# - - - - - - - - - - - - - - 
+# Data
+# - - - - - - - - - - - - - - 
+cd /workspaces/dotnet-on-k8s/PlatformService/
+mkdir Data
+touch Data/AppDbContext.cs
