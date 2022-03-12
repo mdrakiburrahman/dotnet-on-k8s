@@ -19,8 +19,14 @@ Overall solution Architecture
 ![Command Service](_images/5.png)
 ![Command Service](_images/3.png)
 
+### Kubernetes Deployment
+![K8s](_images/6.png)
+
 # Gotchas
 
 If VSCode namespaces aren't found - we need to restart OmniSharp.
 
 `CTRL + SHIFT + P` -> `Restart Omnisharp`. 
+
+## Microk8s setup
+

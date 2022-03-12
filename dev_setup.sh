@@ -1,7 +1,6 @@
 # - - - - - - - - - - - - - - 
 # Scaffolding the Service
 # - - - - - - - - - - - - - - 
-
 # New Webapi Project
 # https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-6.0&tabs=visual-studio-code
 dotnet new webapi -n PlatformService
@@ -106,3 +105,29 @@ touch Profiles/PlatformsProfile.cs
 # Controller
 # - - - - - - - - - - - - - - 
 touch Controllers/PlatformsController.cs
+
+# - - - - - - - - - - - - - - 
+# Docker
+# - - - - - - - - - - - - - - 
+cd /workspaces/dotnet-on-k8s/PlatformService
+touch Dockerfile
+
+# Build the image
+docker build -t mdrrakiburrahman/platformservice .
+
+# Run image in detached mode
+docker run -p 8080:80 -d mdrrakiburrahman/platformservice
+
+# Stop/Start
+docker stop 3af6c8352406
+docker start 3af6c8352406
+
+# Login to docker with access token
+docker login --username=mdrrakiburrahman --password=$DOCKERHUB_TOKEN
+
+# Push to Docker Hub
+docker push mdrrakiburrahman/platformservice
+
+# - - - - - - - - - - - - - - 
+# Kubernetes
+# - - - - - - - - - - - - - -
