@@ -31,6 +31,10 @@ namespace PlatformService
             // Starts up with an In Memory Database
             services.AddDbContext<AppDbContext>(opt => 
                 opt.UseInMemoryDatabase("InMem"));
+            // If someone asks for IPlatformRepo, give them PlatformRepo
+            // This is a standard pattern for dependency injection
+            // We register an Interface and then the Concrete Implementation of it
+            services.AddScoped<IPlatformRepo, PlatformRepo>();
             // - - - - - - - - - - - - - - - - - - - - - - - -
             // More later for SQL Server
             // - - - - - - - - - - - - - - - - - - - - - - - -
@@ -61,6 +65,11 @@ namespace PlatformService
             {
                 endpoints.MapControllers();
             });
+
+            // - - - - - - - - - - - - - - - - - - - - - - - -
+            // Prepare our Mockup Database
+            // - - - - - - - - - - - - - - - - - - - - - - - -
+            PrepDb.PrepPopulation(app);
         }
     }
 }
