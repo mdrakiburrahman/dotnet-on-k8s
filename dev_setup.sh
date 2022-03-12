@@ -1,6 +1,6 @@
-# - - - - - - - - - - - - - - 
-# Scaffolding the Service
-# - - - - - - - - - - - - - - 
+# ===========================
+# Platform Service
+# ===========================
 # New Webapi Project
 # https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-6.0&tabs=visual-studio-code
 dotnet new webapi -n PlatformService
@@ -54,8 +54,8 @@ touch PrepDb.cs # Prepare some mock data and insert into our database
 dotnet dev-certs https # Build a developer certificate
 dotnet build
 dotnet run
-root ➜ /workspaces/dotnet-on-k8s/PlatformService (main ✗) $ dotnet run
-Building...
+# root ➜ /workspaces/dotnet-on-k8s/PlatformService (main ✗) $ dotnet run
+# Building...
 # --> Seeding data...
 # warn: Microsoft.AspNetCore.Server.Kestrel[0]
 #       Unable to bind to https://localhost:5001 on the IPv6 loopback interface: 'Cannot assign requested address'.
@@ -131,3 +131,58 @@ docker push mdrrakiburrahman/platformservice
 # - - - - - - - - - - - - - - 
 # Kubernetes
 # - - - - - - - - - - - - - -
+cd /workspaces/dotnet-on-k8s
+mkdir K8S
+touch K8S/platforms-deply.yaml
+
+# Create a deployment
+kubectl apply -f K8S/platforms-depl.yaml
+
+# ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+# ===========================
+# Commands Service
+# ===========================
+cd /workspaces/dotnet-on-k8s
+dotnet new webapi -n CommandsService
+cd /workspaces/dotnet-on-k8s/CommandsService
+
+# Remove weather nonsense
+rm -rf WeatherForecast.cs
+rm -rf Controllers/WeatherForecastController.cs
+
+# Add dependencies
+dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection -v 8.1.1
+dotnet add package Microsoft.EntityFrameworkCore -v 5.0.8
+dotnet add package Microsoft.EntityFrameworkCore.Design -v 5.0.8
+dotnet add package Microsoft.EntityFrameworkCore.InMemory -v 5.0.8
+
+# Test out
+dotnet dev-certs https # Build a developer certificate
+dotnet run
+
+# - - - - - - - - - - - - - - 
+# Controller
+# - - - - - - - - - - - - - -
+# Let's first get the service to talk to our PlatformService synchronously -  we will add Models etc later
+
+# We will have 2 controllers:
+# 1. PlatformsController
+# 2. CommandsController
+
+cd /workspaces/dotnet-on-k8s/CommandsService/Controllers
+touch PlatformsController.cs
+
+# Now let's create comms between Platform and Command - synchronous POST to start with
+cd /workspaces/dotnet-on-k8s/PlatformService
+mkdir SyncDataServices
+mkdir SyncDataServices/Http # We will be using Http "Client Factory" that can handle best practices for Http stuff
+
+cd SyncDataServices/Http
+touch ICommandDataClient.cs
+touch HttpCommandDataClient.cs
+
+# Trust cert for Command and run the service
+dotnet dev-certs https --clean
+dotnet dev-certs https --trust
+dotnet run

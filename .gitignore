@@ -36,3 +36,6 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 .devcontainer/devcontainer.env
+
+# kubeconfig
+microk8s/*

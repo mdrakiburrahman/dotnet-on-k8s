@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PlatformService.Data;
+using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService
 {
@@ -43,6 +44,9 @@ namespace PlatformService
             // Add our Controllers
             services.AddControllers();
 
+            // Map from Interface to Concrete Implementation - aka this is injected via HTTP Client Factory from Startup.cs
+            services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+
             // - - - - - - - - - - - - - - - - - - - - - - - -
             // More later for SQL Server
             // - - - - - - - - - - - - - - - - - - - - - - - -
@@ -51,6 +55,8 @@ namespace PlatformService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });
             });
+
+            Console.WriteLine($"--> Command Service Endpoint {Configuration["CommandService"]}");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
