@@ -202,11 +202,19 @@ cd /workspaces/dotnet-on-k8s/CommandsService
 docker build -t mdrrakiburrahman/commandservice .
 docker push mdrrakiburrahman/commandservice
 
-# Rebuild Platform Service since we changed it
+# Test
+docker run -p 8080:80 mdrrakiburrahman/commandservice
+
+# - - - - - - - - - - - - - - - - - -
+# Dockerfile: Platform Service Update
+# - - - - - - - - - - - - - - - - - -
 cd /workspaces/dotnet-on-k8s/PlatformService
+touch appsettings.Production.json
+
+# Rebuild Platform Service since we changed it
 docker build -t mdrrakiburrahman/platformservice .
 docker push mdrrakiburrahman/platformservice
 
-# Test each seperately (we cannot hook them up via appsettings.Development.json in Docker)
-docker run -p 8080:80 mdrrakiburrahman/commandservice
-docker run -p 8080:80 mdrrakiburrahman/platformservice
+# Deployment rolling update - forces image pull
+kubectl rollout restart deployment platforms-depl
+kubectl rollout restart deployment commands-depl
