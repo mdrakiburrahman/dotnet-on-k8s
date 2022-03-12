@@ -31,14 +31,22 @@ namespace PlatformService
             // Starts up with an In Memory Database
             services.AddDbContext<AppDbContext>(opt => 
                 opt.UseInMemoryDatabase("InMem"));
+                
             // If someone asks for IPlatformRepo, give them PlatformRepo
             // This is a standard pattern for dependency injection
             // We register an Interface and then the Concrete Implementation of it
             services.AddScoped<IPlatformRepo, PlatformRepo>();
+
+            // Add Automapper to map DTOs to our Internal Models
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            // Add our Controllers
+            services.AddControllers();
+
             // - - - - - - - - - - - - - - - - - - - - - - - -
             // More later for SQL Server
             // - - - - - - - - - - - - - - - - - - - - - - - -
-            services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });

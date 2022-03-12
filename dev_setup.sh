@@ -88,3 +88,21 @@ mkdir Dtos
 touch Dtos/PlatformReadDto.cs
 # The use case is Consumers will be reading from us - so we want to have a Read Dto for anyone reading from us
 # The other is we have another Dto for a create operation, what data we expect to be passed in - will be slightly different.
+touch Dtos/PlatformCreateDto.cs
+
+# Now, we have our Dtos and our internal model/repo, but they don't know about each other!
+
+# Enter 
+# Automapper: Put it into Startup, performs the mapping
+# Profile: Profile to map Dto to Model
+
+# - - - - - - - - - - - - - - 
+# Profile
+# - - - - - - - - - - - - - - 
+mkdir Profiles
+touch Profiles/PlatformsProfile.cs
+
+# - - - - - - - - - - - - - - 
+# Controller
+# - - - - - - - - - - - - - - 
+touch Controllers/PlatformsController.cs
