@@ -218,3 +218,39 @@ docker push mdrrakiburrahman/platformservice
 # Deployment rolling update - forces image pull
 kubectl rollout restart deployment platforms-depl
 kubectl rollout restart deployment commands-depl
+
+# - - - - - - - - - - - - - - - - - - - - - 
+# NGINX Ingress Controller: AKA API Gateway
+# - - - - - - - - - - - - - - - - - - - - - 
+# microk8s enable ingress
+# We already did it: https://microk8s.io/docs/addon-ingress
+cd /workspaces/dotnet-on-k8s/K8S
+touch ingress-svc.yaml
+
+# Create ingress
+kubectl apply -f ingress-svc.yaml
+# ingress.networking.k8s.io/ingress-srv created
+# service/ingress created
+
+# Get the LoadBalancer IP that exposes the Nginx Ingress Controller Pod
+kubectl get svc -n ingress
+# NAME      TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)                      AGE
+# ingress   LoadBalancer   10.152.183.122   172.23.170.202   80:30530/TCP,443:31138/TCP   114s
+
+# So basically:
+# 0. We connect via DNS to LB Public IP
+# 1. Service in nginx namespace connects to Nginx Controller
+# 2. Nginx Controller handles the path based routing to ClusterIP services regardless of what namespace we put stuff in (it is a DaemonSet)
+# 3. Routing rules go to Service, which goes to desired Pods
+
+# Edit laptop host file: C:\Windows\System32\drivers\etc\hosts
+# 172.23.170.202 acme.com
+
+# Or container host file: /etc/hosts
+echo '172.23.170.202 acme.com' >> /etc/hosts
+
+# Test from in the VS Container
+curl http://acme.com/api/platforms
+# [{"id":1,"name":"Dot Net","publisher":"Microsoft","cost":"Free"},{"id":2,"name":"SQL Server Express","publisher":"Microsoft","cost":"Free"},{"id":3,"name":"Kubernetes","publisher":"Cloud Native Computing Foundation","cost":"Free"},{"id":4,"name":"Docker","publisher":"Docker","cost":"Free"},{"id":5,"name":"Docker","publisher":"Docker","cost":"Free"}]
+
+# If we tail the logs of the Nginx Controller we see the requests
