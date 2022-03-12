@@ -182,7 +182,31 @@ cd SyncDataServices/Http
 touch ICommandDataClient.cs
 touch HttpCommandDataClient.cs
 
-# Trust cert for Command and run the service
+# Trust cert for Command and run both services
 dotnet dev-certs https --clean
 dotnet dev-certs https --trust
+
+cd /workspaces/dotnet-on-k8s/CommandsService # Terminal 1
 dotnet run
+
+cd /workspaces/dotnet-on-k8s/PlatformService # Terminal 2
+dotnet run
+
+# - - - - - - - - - - - - - - 
+# Dockerfile: Command Service
+# - - - - - - - - - - - - - -
+touch Dockerfile
+
+# Build Command Service
+cd /workspaces/dotnet-on-k8s/CommandsService
+docker build -t mdrrakiburrahman/commandservice .
+docker push mdrrakiburrahman/commandservice
+
+# Rebuild Platform Service since we changed it
+cd /workspaces/dotnet-on-k8s/PlatformService
+docker build -t mdrrakiburrahman/platformservice .
+docker push mdrrakiburrahman/platformservice
+
+# Test each seperately (we cannot hook them up via appsettings.Development.json in Docker)
+docker run -p 8080:80 mdrrakiburrahman/commandservice
+docker run -p 8080:80 mdrrakiburrahman/platformservice
