@@ -279,4 +279,31 @@ dotnet ef migrations add initialmigration
 # ├── 20220313013417_initialmigration.Designer.cs
 # └── AppDbContextModelSnapshot.cs
 
+# - - - - - - - - - - 
+# Improve Commands
+# - - - - - - - - - -
+cd /workspaces/dotnet-on-k8s/CommandsService
+mkdir Models
+touch Models/Platform.cs
+touch Models/Commands.cs
 
+# Setup relationship between Platform and Commands
+mkdir Data
+touch Data/AppDbContext.cs
+
+# We will continue following the repository pattern in this service similar to Platform
+touch Data/ICommandRepo.cs # Interface
+touch Data/CommandRepo.cs # Implementation 
+
+# Create DTOs
+mkdir Dtos
+touch Dtos/PlatformReadDto.cs # Implement against Platform.cs
+touch Dtos/CommandReadDto.cs # Implement against Commands.cs
+touch Dtos/CommandCreateDto.cs # Implement against Commands.cs
+
+# Create AutoMapper Profiles
+mkdir Profiles
+touch Profiles/CommandsProfile.cs
+
+# Create our Commands Controller
+touch Controllers/CommandsController.cs

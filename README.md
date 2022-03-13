@@ -18,6 +18,8 @@ Overall solution Architecture
 
 ![Command Service](_images/5.png)
 ![Command Service](_images/3.png)
+Data model for the Commands Service, everything uses a `PlatformId` pretty much:
+![Command Service](_images/7.png)
 
 ### Kubernetes Deployment
 ![K8s](_images/6.png)
@@ -67,7 +69,7 @@ microk8s kubectl get nodes -o wide
 
 # Enable features needed for arc
 microk8s enable dns storage metallb ingress
-# Enter CIDR for MetalLB: 172.23.170.200-172.23.170.220
+# Enter CIDR for MetalLB: 172.26.219.75-172.26.219.100
 # This must be in the same range as the VM above!
 
 # Access via kubectl in this container
