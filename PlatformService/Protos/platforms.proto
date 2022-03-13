@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+// The name of our csharp_namespace
+option csharp_namespace = "PlatformService";
+
+// This is the "method" the client calls remotely
+service GrpcPlatform {
+    rpc GetAllPlatforms (GetAllRequest) returns (PlatformResponse);
+}
+
+// Get all - no input needed
+message GetAllRequest {}
+
+// Return - a single entry
+message GrpcPlatformModel {
+    int32 platformId = 1; // Position number, not value!
+    string name = 2;
+    string publisher = 3;
+}
+
+// Return - an "array" of GrpcPlatformModel
+message PlatformResponse {
+    repeated GrpcPlatformModel platform = 1;
+}

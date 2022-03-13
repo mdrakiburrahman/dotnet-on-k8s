@@ -21,6 +21,13 @@ namespace PlatformService.Profiles
 
             // 3. We push a ReadDto - once it is available - into the Message Bus
             CreateMap<PlatformReadDto, PlatformPublishedDto>();
+
+            // 4. gRPC
+            CreateMap<Platform, GrpcPlatformModel>()
+                .ForMember(dest => dest.PlatformId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Publisher, opt => opt.MapFrom(src => src.Publisher));
+            
         }
     }
 }

@@ -354,3 +354,38 @@ mkdir AsyncDataServices
 # No interface for this one, this one will run in the background and listen for events
 # Using interface would be crazy hard for this because of Service Lifectime so we just run this in the background
 touch AsyncDataServices/MessageBusSubscriber.cs 
+
+# - - - - - - - 
+# gRPC - Setup
+# - - - - - - -
+# Added port-mapping stuff in Platform (gRPC server's) appsettings.Production.json file
+
+# Server Packages
+cd /workspaces/dotnet-on-k8s/PlatformService
+dotnet add package Grpc.AspNetCore
+
+# Client Packages
+cd /workspaces/dotnet-on-k8s/CommandsService
+dotnet add package Grpc.Tools
+dotnet add package Grpc.Net.Client
+dotnet add package Google.Protobuf
+
+# Server work
+cd /workspaces/dotnet-on-k8s/PlatformService
+mkdir Protos
+touch Protos/platform.proto
+# Also included a new dependency in our csproj file
+
+dotnet build
+# Generates generated code here
+# root ➜ .../obj/Debug/net5.0/Protos (main ✗) $ pwd
+# /workspaces/dotnet-on-k8s/PlatformService/obj/Debug/net5.0/Protos
+# root ➜ .../obj/Debug/net5.0/Protos (main ✗) $ tree
+# .
+# ├── Platforms.cs
+# └── PlatformsGrpc.cs
+
+# 0 directories, 2 files
+cd /workspaces/dotnet-on-k8s/PlatformService/SyncDataServices
+mkdir Grpc
+touch Grpc/GrpcPlatformService.cs
