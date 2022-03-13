@@ -4,6 +4,11 @@
 ARG VARIANT="5.0-focal"
 FROM mcr.microsoft.com/vscode/devcontainers/dotnet:${VARIANT}
 
+# https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
+# https://stackoverflow.com/a/59814147/8954538
+ENV PATH $PATH:/root/.dotnet/tools
+RUN dotnet tool install -g dotnet-ef
+
 # [Choice] Node.js version: none, lts/*, 16, 14, 12, 10
 ARG NODE_VERSION="none"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
@@ -65,7 +70,8 @@ RUN mkdir -p /tmp/downloads/helm \
 # Install Linux stuff
 RUN apt-get update \
     && apt-get install tree -y \
-    && apt-get install make -y
+    && apt-get install make -y \
+    && apt-get install dos2unix -y
 
 # Clean up
 RUN apt-get autoremove -y \

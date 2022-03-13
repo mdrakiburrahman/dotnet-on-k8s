@@ -15,5 +15,6 @@ namespace PlatformService.Data
         // Database Set - asks DBContext to mirror our internal Class Models.Platforms to the Database
         // Note that we register this in Startup.cs
         public DbSet<Platform> Platforms { get; set; }
+        public object Database { get; internal set; }
     }
 }

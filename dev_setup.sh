@@ -266,3 +266,17 @@ kubectl create secret generic mssql --from-literal=SA_PASSWORD=$SQL_PASSWORD
 # Create SQL Pod
 kubectl apply -f sql-depl.yaml
 
+# - - - - - - - - - - 
+# Generate Migrations
+# - - - - - - - - - -
+# https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
+
+# Create migration - trick it into thinking we're using SQL Server by commenting out the if statement in Startup.cs
+dotnet ef migrations add initialmigration
+# This creates a Migrations folder - basically a bunch of scripts to tell SQL Server how to create the Database
+# .
+# ├── 20220313013417_initialmigration.cs
+# ├── 20220313013417_initialmigration.Designer.cs
+# └── AppDbContextModelSnapshot.cs
+
+
