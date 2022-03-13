@@ -253,4 +253,16 @@ echo '172.23.170.202 acme.com' >> /etc/hosts
 curl http://acme.com/api/platforms
 # [{"id":1,"name":"Dot Net","publisher":"Microsoft","cost":"Free"},{"id":2,"name":"SQL Server Express","publisher":"Microsoft","cost":"Free"},{"id":3,"name":"Kubernetes","publisher":"Cloud Native Computing Foundation","cost":"Free"},{"id":4,"name":"Docker","publisher":"Docker","cost":"Free"},{"id":5,"name":"Docker","publisher":"Docker","cost":"Free"}]
 
-# If we tail the logs of the Nginx Controller we see the requests
+# If we tail the logs of the Nginx Controller we see the requests as the flow in!
+
+# - - - - - - -
+# SQL on Linux
+# - - - - - - -
+cd /workspaces/dotnet-on-k8s/K8S
+
+# Create SQL SA Secret
+kubectl create secret generic mssql --from-literal=SA_PASSWORD=$SQL_PASSWORD
+
+# Create SQL Pod
+kubectl apply -f sql-depl.yaml
+
