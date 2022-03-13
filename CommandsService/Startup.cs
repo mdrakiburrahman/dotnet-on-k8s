@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandsService.AsyncDataServices;
 using CommandsService.Data;
+using CommandsService.EventProcessing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +40,11 @@ namespace CommandsService
             services.AddScoped<ICommandRepo, CommandRepo>();
 
             services.AddControllers();
+
+            // RabbitMQ
+            services.AddHostedService<MessageBusSubscriber>();
+
+            services.AddSingleton<IEventProcessor, EventProcessor>();
             
             // Add Automapper to map DTOs to our Internal Models
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

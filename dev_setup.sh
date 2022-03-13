@@ -330,3 +330,27 @@ touch Dtos/PlatformPublishedDto.cs
 mkdir AsyncDataServices
 touch AsyncDataServices/IMessageBusClient.cs # Interface
 touch AsyncDataServices/MessageBusClient.cs # Class
+
+# - - - - - - - - - - - - - - 
+# Consumer: Commands Service
+# - - - - - - - - - - - - - - 
+dotnet add package RabbitMQ.Client
+# TODO:
+# 1. Subscribe to Message Bus
+# 2. Determine the event from the Message Bus
+# 3. Do something with the event
+
+# Need:
+# 1. 2 new DTOs
+touch Dtos/PlatformPublishedDto.cs
+touch Dtos/GenericEventDto.cs
+# 2. RabbitMQ App Config
+# 3. Event Processor - what was the event? What do we do with it?
+mkdir EventProcessing
+touch EventProcessing/IEventProcessor.cs
+touch EventProcessing/EventProcessor.cs
+
+mkdir AsyncDataServices
+# No interface for this one, this one will run in the background and listen for events
+# Using interface would be crazy hard for this because of Service Lifectime so we just run this in the background
+touch AsyncDataServices/MessageBusSubscriber.cs 

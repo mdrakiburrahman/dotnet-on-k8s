@@ -11,7 +11,7 @@ namespace CommandsService.Models
         public int Id {get; set; }
         // For tracking Primary Key grabbed from Platform Service
         [Required]
-        public int ExternalID  {get; set; }
+        public int ExternalID {get; set; }
         // Service Name
         [Required]
         public string Name { get; set; }
