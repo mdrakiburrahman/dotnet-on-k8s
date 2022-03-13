@@ -373,7 +373,7 @@ dotnet add package Google.Protobuf
 # Server work
 cd /workspaces/dotnet-on-k8s/PlatformService
 mkdir Protos
-touch Protos/platform.proto
+touch Protos/platforms.proto
 # Also included a new dependency in our csproj file
 
 dotnet build
@@ -389,3 +389,15 @@ dotnet build
 cd /workspaces/dotnet-on-k8s/PlatformService/SyncDataServices
 mkdir Grpc
 touch Grpc/GrpcPlatformService.cs
+
+# Client work
+cd /workspaces/dotnet-on-k8s/CommandsService
+mkdir Protos
+cp /workspaces/dotnet-on-k8s/PlatformService/Protos/platforms.proto /workspaces/dotnet-on-k8s/CommandsService/Protos/platforms.proto
+
+mkdir SyncDataServices
+mkdir SyncDataServices/Grpc
+touch SyncDataServices/Grpc/IPlatformDataClient.cs
+touch SyncDataServices/Grpc/PlatformDataClient.cs
+
+touch Data/PrepDb.cs

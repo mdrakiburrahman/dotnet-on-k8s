@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandService.SyncDataServices.Grpc;
 using CommandsService.AsyncDataServices;
 using CommandsService.Data;
 using CommandsService.EventProcessing;
@@ -49,6 +50,9 @@ namespace CommandsService
             // Add Automapper to map DTOs to our Internal Models
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            // Register gRPC
+            services.AddScoped<IPlatformDataClient, PlatformDataClient>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CommandsService", Version = "v1" });
@@ -75,6 +79,9 @@ namespace CommandsService
             {
                 endpoints.MapControllers();
             });
+
+            // Make gRPC call to hydrate the In Memory DB
+            PrepDb.PrepPopulation(app);
         }
     }
 }
