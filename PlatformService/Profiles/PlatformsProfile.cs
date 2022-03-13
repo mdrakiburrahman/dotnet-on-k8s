@@ -18,7 +18,9 @@ namespace PlatformService.Profiles
             // 2. We will have use cases where Dto is source and Platform is target
             // We need to explicitly add that, it is not implicit
             CreateMap<PlatformCreateDto, Platform>();
-            
+
+            // 3. We push a ReadDto - once it is available - into the Message Bus
+            CreateMap<PlatformReadDto, PlatformPublishedDto>();
         }
     }
 }

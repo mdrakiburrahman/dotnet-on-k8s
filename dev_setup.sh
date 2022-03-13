@@ -307,3 +307,26 @@ touch Profiles/CommandsProfile.cs
 
 # Create our Commands Controller
 touch Controllers/CommandsController.cs
+
+# - - - - -
+# RabbitMQ
+# - - - - -
+cd /workspaces/dotnet-on-k8s/K8S
+touch rabbitmq-depl.yaml
+kubectl apply -f rabbitmq-depl.yaml
+# 172.26.219.79:15672
+# guest:guest
+
+# - - - - - - - - - - - - - - 
+# Publisher: Platform Service
+# - - - - - - - - - - - - - - 
+/workspaces/dotnet-on-k8s/PlatformService
+dotnet add package RabbitMQ.Client
+
+# We will create a seperate DTO for publishing onto the Message Bus
+touch Dtos/PlatformPublishedDto.cs
+
+# We will build an interface with dependency injection - this will have the methods we implement via a Concrete class
+mkdir AsyncDataServices
+touch AsyncDataServices/IMessageBusClient.cs # Interface
+touch AsyncDataServices/MessageBusClient.cs # Class

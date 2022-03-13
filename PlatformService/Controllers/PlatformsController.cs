@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.Dtos;
 using PlatformService.Models;
@@ -17,15 +18,18 @@ namespace PlatformService.Controllers
         private readonly IPlatformRepo _repository;
         private readonly IMapper _mapper;
         private readonly ICommandDataClient _commandDataClient;
+        private readonly IMessageBusClient _messageBusClient;
 
         public PlatformsController(
             IPlatformRepo repository, 
             IMapper mapper,
-            ICommandDataClient commandDataClient)
+            ICommandDataClient commandDataClient,
+            IMessageBusClient messageBusClient)
         {
             _repository = repository;
             _mapper = mapper;
             _commandDataClient = commandDataClient;
+            _messageBusClient = messageBusClient;
         }
 
         [HttpGet] // We will return an enumeration of our Dtos here
@@ -74,7 +78,7 @@ namespace PlatformService.Controllers
             // 3. URI to the resource location
             var platformReadDto = _mapper.Map<PlatformReadDto>(platformModel);
 
-            // Make call back to our Commands Service
+            // Send sync message: Commands Service
             try
             {
                 await _commandDataClient.SendPlatformToCommand(platformReadDto);
@@ -83,6 +87,21 @@ namespace PlatformService.Controllers
             {
                 Console.WriteLine($"--> Could not send synchronously to Command Service: {e.Message} | {e.InnerException}");
             }
+
+            // Send async message: RabbitMQ
+            try
+            {
+                var platformPublishedDto = _mapper.Map<PlatformPublishedDto>(platformReadDto);
+
+                // Note that platformReadDto doesn't have the Event field that platformPublishedDto does - so we put it in
+                platformPublishedDto.Event = "Platform_Published"; // We would normally document the different types
+                _messageBusClient.PublishNewPlatform(platformPublishedDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"--> Could not send asynchronously to Rabbit MQ: {ex.Message} | {ex.InnerException}");
+            }
+
             
             // Sends an HTTP 201 with a Route back to the resource location as part of the return header
             return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id }, platformReadDto); // Returns the resource created in Body

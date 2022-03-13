@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PlatformService.AsyncDataServices;
 using PlatformService.Data;
 using PlatformService.SyncDataServices.Http;
 
@@ -59,6 +60,9 @@ namespace PlatformService
 
             // Map from Interface to Concrete Implementation - aka this is injected via HTTP Client Factory from Startup.cs
             services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+
+            // Map from RabbitMQ Interface to Class
+            services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
             // - - - - - - - - - - - - - - - - - - - - - - - -
             // More later for SQL Server
